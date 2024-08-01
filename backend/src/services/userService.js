@@ -13,8 +13,9 @@ function randomInt(min, max) {
 }
 
 class UserService {
-  constructor(knex) {
+  constructor(knex, redis) {
     this.knex = knex;
+    this.redis = redis;
   }
   /*
     table.string("id").primary();
@@ -37,6 +38,22 @@ class UserService {
       })
       .returning("*");
   }
+
+  saveUsersToRedis(users) {
+    this.redis.set("users", JSON.stringify(users));
+    // expires in 10 seconds
+    this.redis.expire("users", 10);
+  }
+
+  getUsersFromRedis() {
+    return this.redis.get("users").then((users) => {
+      if (users) {
+        return JSON.parse(users);
+      }
+      return null;
+    });
+  }
+
   allUsers() {
     return this.knex("users").select("*");
   }

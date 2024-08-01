@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const knex = require("../../connections/knex");
+const redis = require("../../connections/redis");
 
 const UserController = require("../../controllers/userController");
-const userController = new UserController(knex);
+const userController = new UserController(knex, redis);
 
 const userRoutes = Router();
 
