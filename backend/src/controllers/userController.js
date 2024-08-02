@@ -1,8 +1,8 @@
 const UserService = require("../services/userService");
 
 class UserController {
-  constructor(knex, redis) {
-    this.userService = new UserService(knex, redis);
+  constructor(injections) {
+    this.userService = new UserService(injections.knex, injections.redis);
   }
 
   createUser = async (req, res) => {
